@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+spec:
+  replicas: 1
+  selector: # pods to manage
+    matchLabels:
+      app: moderation
+  template: # pod config to create
+    metadata:
+      labels:
+        app: moderation
+    spec:
+      containers:
+        - name: moderation
+          image: rovilay/moderation:latest
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  type: ClusterIP
+  selector: 
+    app: moderation
+  ports:
+    - name: moderation
+      protocol: TCP
+      port: 4003 # port for service
+      targetPort: 4003 # port for pod

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1
+  selector: # pods to manage
+    matchLabels:
+      app: posts
+  template: # pod config to create
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: rovilay/posts:latest
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-srv
+spec:
+  type: ClusterIP
+  selector: 
+    app: posts
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000 # port for service
+      targetPort: 4000 # port for pod
